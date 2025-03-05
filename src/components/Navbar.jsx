@@ -1,9 +1,11 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+  const { user, logout } = useAuth();
 
   // Handle search input change
   const handleSearchChange = (e) => {
@@ -41,9 +43,36 @@ const Navbar = () => {
 
       {/* Navigation Links */}
       <div>
-        <Link className="btn btn-outline-light me-2" to="/genre">Genres</Link>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
+        <Link className="navbar-brand" to="/">Movie App</Link>
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">Home</Link>
+            </li>
+            {user ? (
+              <>
+                <li className="nav-item">
+                  <span className="nav-link text-white">Welcome, {user.displayName || user.email}!</span>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-danger" onClick={logout}>Logout</button>
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <Link className="btn btn-primary" to="/login">Login</Link>
+              </li>
+            )}
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+        {/* <Link className="btn btn-outline-light me-2" to="/genre">Genres</Link>
         <Link className="btn btn-outline-light" to="/test3">Test </Link>
-        <Link className="btn btn-outline-light" to="/signup">Login </Link>
+        <Link className="btn btn-outline-light" to="/signup">Login </Link> */}
 
       </div>
     </nav>
